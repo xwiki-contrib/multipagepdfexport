@@ -31,7 +31,7 @@
   <artifactId>xwiki-multipagepdfexport</artifactId>
   <name>XWiki Multipage PDF Export</name>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <scm>
     <connection>scm:git:git://github.com/xwiki-contrib/multipagepdfexport.git</connection>
     <developerConnection>scm:git:git@github.com:xwiki-contrib/multipagepdfexport.git</developerConnection>
