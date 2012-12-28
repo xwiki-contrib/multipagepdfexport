@@ -28,7 +28,7 @@
     <version>3.5.1</version>
   </parent>
   <groupId>org.xwiki.contrib</groupId>
-  <artifactId>xwiki-multipagepdfexport-api</artifactId>
+  <artifactId>xwiki-multipagepdfexport</artifactId>
   <name>XWiki Multipage PDF Export</name>
   <packaging>jar</packaging>
   <version>1.1-SNAPSHOT</version>
