@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>XWiki</web>
+  <name>PDFExportSheet</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <parent>XWiki.WebHome</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1325372400000</creationDate>
+  <date>1356701334000</date>
+  <contentUpdateDate>1356700930000</contentUpdateDate>
+  <version>1.1</version>
+  <title>$msg.get('pdfexport.export.title', [$doc.space])</title>
+  <template/>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.0</syntaxId>
+  <hidden>true</hidden>
+  <object>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators> ,|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <disabled>0</disabled>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators> ,|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage=Always on this page|onDemand=On demand|always=Always on this wiki</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <name>XWiki.PDFExportSheet</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>e9e571c9-ac9f-48bb-a441-35025203c30a</guid>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>.hierarchyexport fieldset {
+  text-align: right;
+}
+
+.hierarchyexport .pdftocExport {
+  margin-bottom: 10px;
+}
+</code>
+    </property>
+    <property>
+      <name>Pdf export form style</name>
+    </property>
+    <property>
+      <parse/>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+  <content>{{info}}
+{{velocity}}$msg.get('pdfexport.help'){{/velocity}}
+{{/info}}
+
+{{velocity output="false"}}
+#macro(printExcludeList $space)
+  #set($excludeDocuments = [])
+  ##exclude class documents created by app within minutes
+  #set($spaceHome = $xwiki.getDocument($space, 'WebHome'))
+  #set($livetableObjInWebHome = $spaceHome.getObject('AppWithinMinutes.LiveTableClass'))
+  #if($livetableObjInWebHome)
+    #set($classDocument = $livetableObjInWebHome.getProperty('class').value)
+    #set($discard = $excludeDocuments.add($classDocument))
+    ## compose the names of the sheet and template and exclude
+    ## TODO: find a better way to do this
+    #set($classIndex = $classDocument.lastIndexOf('Class'))
+    #set($classPrefix = $classDocument.substring(0, $classIndex))
+    ## add template and sheet to the excludes
+    #set($discard = $excludeDocuments.add("${classPrefix}Sheet"))
+    #set($discard = $excludeDocuments.add("${classPrefix}Template"))
+  #end
+  ## exclude webpreferences
+  #set($discard = $excludeDocuments.add("${space}.WebPreferences"))
+  #foreach($exclude in $excludeDocuments)#if($velocityCount &gt; 1), #{end}$exclude#end
+#end
+{{/velocity}}
+
+{{velocity}}
+#set($discard = $xwiki.ssx.use("XWiki.PDFExportSheet"))
+#if ($request.getParameterValues('pdfpages') &amp;&amp; $request.getParameterValues('pdfpages').size() &gt; 0)
+  ## get the name of the package to export
+  #set($packageName = "$!request.exportname")
+  #if ($packageName == "")
+    #set($packageName = "$doc.space")
+  #end
+  ## get the list of documents to export
+  #set($docsToExport = [])
+  ## create a list like this since apparently we have no other way in velocity to add all the elements from the array to the list
+  #foreach($pdfPage in $request.getParameterValues('pdfpages'))
+    #set($discard = $docsToExport.add($pdfPage))
+  #end
+  ## find out if export should be multipages or not. By default no
+  #set($multipages = false)
+  #if("$!request.multipages" == "true")
+    #set($multipages = true)
+  #end
+  ## find out if export should be force each new document to start on recto
+  #set($startonrecto = false)
+  #if("$!request.startonrecto" == "true")
+    #set($startonrecto = true)
+  #end
+  ## do export, we have a selection. Grab the pdf exporter and pass it the pages to export
+  $services.pdfexporter.export($packageName, $docsToExport, $multipages, $startonrecto)
+#else
+  ## no submitted data, display the hierarchy with checkboxes to select
+  {{html clean="false" wiki="false" }}
+    &lt;form action="" method="post" class="hierarchyexport"&gt;
+  {{/html}}
+
+  {{hierarchy space="$doc.space" excludes="#printExcludeList($doc.space)" displayvalue="displayTitle" defaultparent="${doc.space}.WebHome" showcheckboxes=true checkboxexcludes="${doc.space}.WebHome" checkboxname="pdfpages" reorderable="true" /}}
+
+  {{html clean="false" wiki="false"}}
+   &lt;fieldset&gt;
+     &lt;label for="exportname"&gt;$msg.get('pdfexport.filename')&lt;/label&gt;
+     &lt;input type="text" name="exportname" value="$doc.space" id="exportname" /&gt;
+     ## some pdf settings go here     
+     &lt;div class="multipagesExport"&gt;
+       &lt;label for="multipages"&gt;$msg.get('pdfexport.multipages')&lt;/label&gt;&lt;input type="checkbox" class="multipagesCheckbox" name="multipages" id="multipages" value="true"/&gt;
+     &lt;/div&gt;
+     &lt;div class="startOnRecto"&gt;
+       &lt;label for="startonrecto"&gt;$msg.get('pdfexport.startonrecto')&lt;/label&gt;&lt;input type="checkbox" class="startonrectoCheckbox" name="startonrecto" id="startonrecto" value="true"/&gt;
+     &lt;/div&gt;
+     &lt;div class="pdfcoverExport"&gt;
+       &lt;label&gt;$msg.get('pdfexport.pdfcover')&lt;/label&gt;&lt;input type="checkbox" name="pdfcover" value="1" /&gt;&lt;input type="hidden" name="pdfcover" value="0" /&gt;
+     &lt;/div&gt;
+     &lt;div class="pdftocExport"&gt;
+       &lt;label&gt;$msg.get('pdfexport.pdftoc')&lt;/label&gt;&lt;input type="checkbox" name="pdftoc" value="1" /&gt;&lt;input type="hidden" name="pdftoc" value="0" /&gt;
+     &lt;/div&gt;
+     &lt;input type="hidden" name="comments" value="0" /&gt;
+     &lt;input type="hidden" name="attachments" value="0" /&gt;
+     &lt;div class="buttons buttonwrapper"&gt;
+       &lt;a class="secondary button" href="$doc.getURL()"&gt;$msg.get('cancel')&lt;/a&gt;     
+       &lt;input type="submit" class="button" name="export" value="$msg.get('pdfexport.doexport')" /&gt;
+     &lt;/div&gt;
+     &lt;/fieldset&gt;
+     &lt;/form&gt;
+  {{/html}}
+#end
+{{/velocity}}
+</content>
+</xwikidoc>

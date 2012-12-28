@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>XWiki</web>
+  <name>PDFExportTranslations</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <parent>XWiki.PDFExportSheet</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1356695285000</creationDate>
+  <date>1356695950000</date>
+  <contentUpdateDate>1356695950000</contentUpdateDate>
+  <version>1.1</version>
+  <title>PDFExportTranslations</title>
+  <template/>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <object>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators> ,|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <name>XWiki.PDFExportTranslations</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>ae145efd-3aa7-4326-9f40-f147756dfff4</guid>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
+  <content>pdfexport.export.title={0}: Export multiple pages
+pdfexport.help=Check the boxes to select the pages to put in the exported PDF.\n\n Note: you can move the pages in this interface to change the order of the pages exported in the PDF, the modifications on the hierarchy will not be preserved.
+pdfexport.filename=Name of the exported file:
+pdfexport.doexport=Export
+pdfexport.multipages=Every document starts on a new page
+pdfexport.startonrecto=Every document starts on 'recto' (only if the "new page" checkbox is checked)
+pdfexport.pdfcover=Print a cover page (containing the pdf title and the export date)
+pdfexport.pdftoc=Print a table of contents
+</content>
+</xwikidoc>
