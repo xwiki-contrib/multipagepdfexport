@@ -88,7 +88,7 @@ import com.xpn.xwiki.web.XWikiURLFactory;
 /**
  * XSL-FO/FOP based implementation of the multipage pdfexporter. <br />
  * 
- * @version $Id$
+ * @version $Id: 38a24d1f884939b9fbf4c5d1b1893140da888fee $
  */
 @Component("xslfop")
 @Singleton
@@ -259,6 +259,11 @@ public class XslFopPdfExporter implements MultipagePdfExporter
             // Context take care of it. pdf.vm is using cdoc so we need it on the vcontext
             VelocityContext vcontext = (VelocityContext) context.get("vcontext");
             vcontext.put("cdoc", vcontext.get("doc"));
+            // put the sdoc on the context, since it's used to get document syntax & all
+            context.put("sdoc", fakeDoc);
+            // rendering engine needs to be on false, since we're rendering pdfheader and pdffooter potentially from a
+            // pdftemplate and we need to make sure that rendering is not adding {{html}} macros around
+            context.put("isInRenderingEngine", false);
 
             String tcontent = null;
             if (tcontent == null) {
@@ -326,6 +331,11 @@ public class XslFopPdfExporter implements MultipagePdfExporter
         // sdoc is used to determine the syntax of the rendered fields, back it up and set it to the current document
         Object originalSDoc = currentEcXContext.get("sdoc");
         Object originalVContext = currentEcXContext.get("vcontext");
+        // prepare here the cdoc on the vcontext which we will replace, for each exported document, with the exported
+        // document. we're doing this since cdoc is hackishly used by the pdf header and footer of the pdf template
+        // since otherwise there is no other way to obtain the currently exported document
+        VelocityContext newVContext = vManager.getVelocityContext();
+        Object newVContextOriginalCDoc = newVContext.get("cdoc");
         try {
             // 3. setup xwiki context
             currentEcXContext.setDatabase(doc.getDocumentReference().getWikiReference().getName());
@@ -337,7 +347,9 @@ public class XslFopPdfExporter implements MultipagePdfExporter
             // different, because the current document was pushed in the context. So we need to reput it back here,
             // however we back it up because xcontext is never cloned when the context is backed up, so we need to put
             // back the proper one when we're done
-            currentEcXContext.put("vcontext", vManager.getVelocityContext());
+            currentEcXContext.put("vcontext", newVContext);
+            // prepare the cdoc on the vcontext so that it can be used inside the pdftemplate fields rendering
+            newVContext.put("cdoc", newVContext.get("doc"));
             // set current document as the sdoc, since the sdoc is used to get syntax for rendered fields and
             // programming rights check
             currentEcXContext.put("sdoc", doc);
@@ -405,6 +417,12 @@ public class XslFopPdfExporter implements MultipagePdfExporter
             }
             if (originalVContext != null) {
                 currentEcXContext.put("vcontext", originalVContext);
+            }
+            // restore the original state of the cdoc on the newVContext
+            if (newVContextOriginalCDoc != null) {
+                newVContext.put("cdoc", newVContextOriginalCDoc);
+            } else {
+                newVContext.remove("cdoc");
             }
             if (originalSDoc != null) {
                 currentEcXContext.put("sdoc", originalSDoc);
