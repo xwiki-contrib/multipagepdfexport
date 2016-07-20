@@ -33,6 +33,12 @@
   <packaging>jar</packaging>
   <version>1.2-SNAPSHOT</version>
   <description>API for exporting multiple pages in the wiki to a PDF, with various options.</description>
+  <developers>
+    <developer>
+      <id>lucaa</id>
+      <name>Anca Luca</name>
+    </developer>
+</developers>
   <scm>
     <connection>scm:git:git://github.com/xwiki-contrib/multipagepdfexport.git</connection>
     <developerConnection>scm:git:git@github.com:xwiki-contrib/multipagepdfexport.git</developerConnection>
