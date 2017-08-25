@@ -64,6 +64,11 @@
       <artifactId>xwiki-platform-oldcore</artifactId>
       <version>${commons.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-security-api</artifactId>
+      <version>${commons.version}</version>
+    </dependency>
   </dependencies>
   <!-- Skip the enforcer plugin here, for now, we'll upgrade this code later -->  
   <build>

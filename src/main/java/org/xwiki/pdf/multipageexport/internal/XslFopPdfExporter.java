@@ -177,13 +177,6 @@ public class XslFopPdfExporter implements MultipagePdfExporter
     {
         XWikiContext context = getXWikiContext();
 
-        // if list is empty, throw an exception and stop everything
-        if (docs.size() == 0) {
-            XWikiException exc = new XWikiException();
-            exc.setMessage("No documents to export");
-            throw exc;
-        }
-
         // Preparing the PDF http headers to have the browser recognize the file
         // as PDF
         context.getResponse().setContentType("application/pdf");

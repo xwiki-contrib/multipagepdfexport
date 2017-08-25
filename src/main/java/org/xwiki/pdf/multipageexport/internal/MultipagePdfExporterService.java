@@ -19,15 +19,22 @@
  */
 package org.xwiki.pdf.multipageexport.internal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.xwiki.component.annotation.Component;
+import org.xwiki.context.Execution;
+import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.pdf.multipageexport.MultipagePdfExporter;
 import org.xwiki.script.service.ScriptService;
+import org.xwiki.security.authorization.AuthorizationManager;
+import org.xwiki.security.authorization.Right;
 
+import com.xpn.xwiki.XWikiContext;
 
 /**
  * Script service to expose the functionality of the pdf exporter implementation, which should also do some rights
@@ -43,6 +50,22 @@ public class MultipagePdfExporterService implements ScriptService
     private MultipagePdfExporter pdfexporter;
 
     /**
+     * The execution, to get the context from it.
+     */
+    @Inject
+    protected Execution execution;
+
+    @Inject
+    protected AuthorizationManager authorizationManager;
+
+    /**
+     * Reference resolver for string representations of references.
+     */
+    @Inject
+    @Named("current")
+    private DocumentReferenceResolver<String> currentDRResolver;
+
+    /**
      * @param name the title of the document to export, the name of the file will be computed from this title replacing
      *            whitespace with underscores
      * @param docs the list of pages to export
@@ -50,8 +73,7 @@ public class MultipagePdfExporterService implements ScriptService
      */
     public void export(String name, List<String> docs) throws Exception
     {
-        // FIXME: clean the list of unvisible documents before
-        pdfexporter.export(name, docs);
+        pdfexporter.export(name, getAccessibleDocuments(docs));
     }
 
     /**
@@ -66,8 +88,7 @@ public class MultipagePdfExporterService implements ScriptService
      */
     public void export(String name, List<String> docs, boolean multiPageSequence) throws Exception
     {
-        // FIXME: clean the list of unvisible documents before
-        pdfexporter.export(name, docs, multiPageSequence);
+        pdfexporter.export(name, getAccessibleDocuments(docs), multiPageSequence);
     }
 
     /**
@@ -85,7 +106,30 @@ public class MultipagePdfExporterService implements ScriptService
     public void export(String name, List<String> docs, boolean multiPageSequence, boolean alwaysStartOnRecto)
         throws Exception
     {
-        // FIXME: clean the list of unvisible documents before
-        pdfexporter.export(name, docs, multiPageSequence, alwaysStartOnRecto);
+        pdfexporter.export(name, getAccessibleDocuments(docs), multiPageSequence, alwaysStartOnRecto);
+    }
+
+    /**
+     * Filters the passed list to exclude the documents on which current user does not have view right.
+     *
+     * @return the list of documents to which the current user has access, from the list of passed documents
+     */
+    protected List<String> getAccessibleDocuments(List<String> docs)
+    {
+        List<String> filteredDocs = new ArrayList<String>();
+        XWikiContext xwikiContext = getXWikiContext();
+        DocumentReference userReference = xwikiContext.getUserReference();
+        for (String docName : docs) {
+            if (authorizationManager.hasAccess(Right.VIEW, userReference, this.currentDRResolver.resolve(docName))) {
+                filteredDocs.add(docName);
+            }
+        }
+
+        return filteredDocs;
+    }
+
+    private XWikiContext getXWikiContext()
+    {
+        return (XWikiContext) execution.getContext().getProperty("xwikicontext");
     }
 }
