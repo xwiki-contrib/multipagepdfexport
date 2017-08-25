@@ -45,6 +45,7 @@ import org.xwiki.context.Execution;
 import org.xwiki.context.ExecutionContextManager;
 import org.xwiki.display.internal.DocumentDisplayer;
 import org.xwiki.display.internal.DocumentDisplayerParameters;
+import org.xwiki.environment.Environment;
 import org.xwiki.model.reference.AttachmentReference;
 import org.xwiki.model.reference.AttachmentReferenceResolver;
 import org.xwiki.model.reference.DocumentReference;
@@ -140,6 +141,12 @@ public class XslFopPdfExporter implements MultipagePdfExporter
     private DocumentDisplayer documentDisplayer;
 
     /**
+     * Used to get the temporary directory.
+     */
+    @Inject
+    private Environment environment;
+
+    /**
      * {@inheritDoc}
      * 
      * @see org.xwiki.pdf.multipageexport.MultipagePdfExporter#export(java.lang.String, java.util.List)
@@ -195,7 +202,7 @@ public class XslFopPdfExporter implements MultipagePdfExporter
             context.getWiki().getURLFactoryService().createURLFactory(XWikiContext.MODE_PDF, context);
         context.setURLFactory(urlf);
         // Preparing temporary directories for the PDF URL Factory
-        File dir = context.getWiki().getTempDirectory(context);
+        File dir = this.environment.getTemporaryDirectory();
         File tempdir = new File(dir, RandomStringUtils.randomAlphanumeric(8));
         // we need to prepare the pdf export directory before running the transclusion
         tempdir.mkdirs();
@@ -233,6 +240,8 @@ public class XslFopPdfExporter implements MultipagePdfExporter
             }
 
             WikiPrinter printer = new DefaultWikiPrinter();
+            // FIXME: why don't we just set xDom as the content of the fakeDoc? Why do we go through rendering as HTML
+            // and then putting it in a html macro and then parsing again as XDOM?
             // Here I'm using the XHTML renderer, other renderers can be used simply
             // by changing the syntax argument.
             BlockRenderer renderer =
