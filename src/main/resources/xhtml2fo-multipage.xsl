@@ -33,6 +33,7 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
 -->
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:svg="http://www.w3.org/2000/svg"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:html="http://www.w3.org/1999/xhtml">
 
@@ -74,6 +75,7 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
 
     <!-- language -->
     <xsl:param name="language" select="//html:head/html:meta[@name='language']/@content"></xsl:param>
+
 
     <!--======================================================================
     Attribute Sets
@@ -130,8 +132,8 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
         <xsl:attribute name="font-style">normal</xsl:attribute>
         <xsl:attribute name="space-before">0.8em</xsl:attribute>
         <xsl:attribute name="space-after">0.2em</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-        <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">1000</xsl:attribute>
+        <xsl:attribute name="keep-together.within-column">1000</xsl:attribute>
         <xsl:attribute name="start-indent">0mm</xsl:attribute>
     </xsl:attribute-set>
 
@@ -141,8 +143,8 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
         <xsl:attribute name="font-style">normal</xsl:attribute>
         <xsl:attribute name="space-before">0.8em</xsl:attribute>
         <xsl:attribute name="space-after">0.2em</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-        <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">900</xsl:attribute>
+        <xsl:attribute name="keep-together.within-column">1000</xsl:attribute>
         <xsl:attribute name="start-indent">0mm</xsl:attribute>
     </xsl:attribute-set>
 
@@ -152,8 +154,8 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
         <xsl:attribute name="font-style">normal</xsl:attribute>
         <xsl:attribute name="space-before">0.8em</xsl:attribute>
         <xsl:attribute name="space-after">0.2em</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-        <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">800</xsl:attribute>
+        <xsl:attribute name="keep-together.within-column">1000</xsl:attribute>
         <xsl:attribute name="start-indent">0mm</xsl:attribute>
     </xsl:attribute-set>
 
@@ -163,8 +165,8 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
         <xsl:attribute name="font-style">normal</xsl:attribute>
         <xsl:attribute name="space-before">0.8em</xsl:attribute>
         <xsl:attribute name="space-after">0.2em</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-        <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">800</xsl:attribute>
+        <xsl:attribute name="keep-together.within-column">1000</xsl:attribute>
         <xsl:attribute name="start-indent">0mm</xsl:attribute>
     </xsl:attribute-set>
 
@@ -174,8 +176,8 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
         <xsl:attribute name="font-style">normal</xsl:attribute>
         <xsl:attribute name="space-before">0.8em</xsl:attribute>
         <xsl:attribute name="space-after">0.2em</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-        <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">800</xsl:attribute>
+        <xsl:attribute name="keep-together.within-column">1000</xsl:attribute>
         <xsl:attribute name="start-indent">0mm</xsl:attribute>
     </xsl:attribute-set>
 
@@ -185,8 +187,8 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
         <xsl:attribute name="font-style">normal</xsl:attribute>
         <xsl:attribute name="space-before">0.8em</xsl:attribute>
         <xsl:attribute name="space-after">0.2em</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-        <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">800</xsl:attribute>
+        <xsl:attribute name="keep-together.within-column">1000</xsl:attribute>
         <xsl:attribute name="start-indent">0mm</xsl:attribute>
     </xsl:attribute-set>
 
@@ -278,8 +280,8 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
     </xsl:attribute-set>
 
     <xsl:attribute-set name="dt">
-        <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-        <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-column">1000</xsl:attribute>
+        <xsl:attribute name="keep-together.within-column">1000</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="dd">
@@ -369,7 +371,7 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
     </xsl:attribute-set>
 
     <xsl:attribute-set name="strong-em">
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
+      <xsl:attribute name="font-weight">bold</xsl:attribute>
       <xsl:attribute name="font-style">
         <xsl:if test="not(starts-with($language, 'ja') or starts-with($language, 'kp') or starts-with($language, 'kr') or starts-with($language, 'zh'))">italic</xsl:if>
       </xsl:attribute>
@@ -487,6 +489,7 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
 
     <xsl:attribute-set name="q"/>
     <xsl:attribute-set name="q-nested"/>
+    <xsl:attribute-set name="label"/>
 
     <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     Image
@@ -537,8 +540,14 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
         <xsl:apply-templates select="." mode="transform"/>
     </xsl:template>
 
-    <!-- The 'style' preprocessor, which takes care of a few CSS properties that need special handling in FO -->
-    <xsl:template match="*[@style]" mode="preprocess">
+    <!-- The 'style' preprocessor, which takes care of a few CSS properties that need special handling in FO.
+
+         Note: Starting with css4j 0.16, css4j applies styles to all elements, including the body tag. For example:
+           <body class="exportbody" id="body" pdfcover="0" pdftoc="0" style="display: block; margin: 8pt; ">
+         As a result we need to exclude the body tag from being processed as otherwise it would lead to a fo:block
+         being issued at the wrong place.
+    -->
+    <xsl:template match="*[@style and not(self::html:body)]" mode="preprocess">
         <!-- Remove all white space and prepend ; for easier processing of the style -->
         <xsl:variable name="style" select="concat(';', translate(normalize-space(@style), ' ', ''))"/>
         <!-- Chain the 'style' processing into several named templates -->
@@ -844,7 +853,7 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
              be empty otherwise and would cause invalid fo, since a flow needs to have 
              something in -->
         <xsl:if test="$need-cover = '1' or $need-toc = '1' or count($pagesequences) = 0">
-          <fo:page-sequence master-reference="all-pages">
+          <fo:page-sequence master-reference="all-pages" id="x-page-sequence">
               <fo:title>
                   <xsl:value-of select="/html:html/html:head/html:title[@class='pdftitle']"/>
               </fo:title>
@@ -898,6 +907,10 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
                                I'll just select everything here, knowing that if there are pagesequences, there is 
                                no reason to have headings directly on xwikimaincontainer so it's either gonna be one 
                                or the other. XSL is a pain -->
+                          <xsl:variable name="tocHeadings" select="//html:div[@id='xwikicontent']/html:*[local-name() = 'h1' or local-name() = 'h2' or local-name() = 'h3'] |
+                              //html:div[contains(concat(' ', @class, ' '), ' pdfpagesequencetitle ')] |
+                              //html:div[contains(concat(' ', @class, ' '), ' pdfpagesequencecontent ')]/html:*[local-name() = 'h1' or local-name() = 'h2' or local-name() = 'h3']" />
+                          <!--
                           <xsl:variable name="tocHeadings" select = "/html:html/html:body/html:div[@id='xwikimaincontainer']/html:h1 |
                                     /html:html/html:body/html:div[@id='xwikimaincontainer']/html:h2 |
                                     /html:html/html:body/html:div[@id='xwikimaincontainer']/html:h3 |
@@ -905,6 +918,7 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
                                     /html:html/html:body/html:div[@id='xwikimaincontainer']/html:*[contains(concat(' ', @class, ' '), ' pdfpagesequence ')]/html:*[contains(concat(' ', @class, ' '), ' pdfpagesequencecontent ')]/html:h1 |
                                     /html:html/html:body/html:div[@id='xwikimaincontainer']/html:*[contains(concat(' ', @class, ' '), ' pdfpagesequence ')]/html:*[contains(concat(' ', @class, ' '), ' pdfpagesequencecontent ')]/html:h2 |
                                     /html:html/html:body/html:div[@id='xwikimaincontainer']/html:*[contains(concat(' ', @class, ' '), ' pdfpagesequence ')]/html:*[contains(concat(' ', @class, ' '), ' pdfpagesequencecontent ')]/html:h3" />
+                          -->
                           <xsl:for-each select="$tocHeadings">
                               <fo:block font-size="9pt" start-indent="10pt" width="100%" text-align-last="justify" >
                                   <xsl:choose>
@@ -995,7 +1009,7 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
             </fo:static-content>
             <fo:flow flow-name="xsl-region-body">
                 <!-- the actual document content -->
-                <fo:block xsl:use-attribute-sets="body">
+                <fo:block xsl:use-attribute-sets="body"  break-before="page">
                     <xsl:call-template name="process-common-attributes"/>
                     <xsl:apply-templates mode="preprocess" select="html:*[contains(concat(' ', @class, ' '), ' pdfpagesequencecontent ')]"/>
                 </fo:block>
@@ -1055,7 +1069,11 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
     <xsl:template match="/html:html/html:body/html:div[@class='pdftoc']" priority="1" mode="preprocess"/>
 
     <xsl:template match="html:span[@class='page-number']" mode="preprocess">
-          <fo:page-number/>
+        <fo:page-number/>
+    </xsl:template>
+
+    <xsl:template match="html:span[@class='page-total']" mode="preprocess">
+        <fo:page-number-citation-last ref-id="x-page-sequence"/>
     </xsl:template>
 
     <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -1179,6 +1197,10 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
                 </xsl:when>
                 <xsl:when test="$name = 'list-style'">
                 </xsl:when>
+                <!-- Not supported in FOP yet and needs to be ignored as otherwise they cause the export to fail with
+                     an exception raised -->
+                <xsl:when test="$name = 'border-image'"/>
+                <xsl:when test="$name = 'tab-stops'"/>
                 <!-- These are not valid in XSL, so we ignore them -->
                 <xsl:when test="$name = 'cursor'"/>
                 <xsl:when test="$name = 'quotes'"/>
@@ -1716,7 +1738,7 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
     </xsl:template>
 
     <xsl:template match="html:tr[parent::html:table and html:th and not(html:td)]" mode="transform">
-        <fo:table-row xsl:use-attribute-sets="tr" keep-with-next="always">
+        <fo:table-row xsl:use-attribute-sets="tr" keep-with-next="1000">
             <xsl:call-template name="process-table-row"/>
         </fo:table-row>
     </xsl:template>
@@ -1998,6 +2020,12 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
         </fo:inline>
     </xsl:template>
 
+    <xsl:template match="html:label" mode="transform">
+        <fo:inline xsl:use-attribute-sets="label">
+            <xsl:call-template name="process-common-attributes-and-children"/>
+        </fo:inline>
+    </xsl:template>
+
     <xsl:template match="html:span[@dir]" mode="transform">
         <fo:bidi-override direction="{@dir}" unicode-bidi="embed">
             <xsl:call-template name="process-common-attributes-and-children"/>
@@ -2170,7 +2198,7 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
                     <xsl:value-of select="substring-before(@src, '?')"/>
                 </xsl:when>
                 <xsl:otherwise>
-            <xsl:value-of select="@src"/>
+                    <xsl:value-of select="@src"/>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>')</xsl:text>
@@ -2189,13 +2217,6 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
 
     <xsl:template match="html:object" mode="transform">
         <xsl:apply-templates mode="preprocess"/>
-    </xsl:template>
-    
-    <!-- A html label outputs the same as a span, the content of this template is copied from the html:span -->
-    <xsl:template match="html:label" mode="transform">
-        <fo:inline>
-            <xsl:call-template name="process-common-attributes-and-children"/>
-        </fo:inline>      
     </xsl:template>
 
     <!-- These elements don't have an equivalent in XSL-FO, just ignore them -->
@@ -2301,4 +2322,21 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
             </xsl:if>
         </fo:inline-container>
     </xsl:template>
-</xsl:stylesheet> 
+
+    <!-- Preserve inline SVG images as <fo:instream-foreign-object>s -->
+    <xsl:template match="html:*/svg:svg" mode="transform">
+        <fo:instream-foreign-object
+          content-width="scale-to-fit" content-height="scale-to-fit"
+          inline-progression-dimension.minimum="auto" inline-progression-dimension.maximum="100%"
+          block-progression-dimension.minimum="auto" block-progression-dimension.maximum="700px">
+            <xsl:copy>
+                <xsl:apply-templates select="@*|node()" mode="svg"/>
+            </xsl:copy>
+        </fo:instream-foreign-object>
+    </xsl:template>
+    <xsl:template match="@*|node()" mode="svg">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()" mode="svg"/>
+        </xsl:copy>
+    </xsl:template>
+</xsl:stylesheet>
