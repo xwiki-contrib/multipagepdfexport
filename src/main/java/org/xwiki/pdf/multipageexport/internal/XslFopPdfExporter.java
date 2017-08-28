@@ -175,6 +175,18 @@ public class XslFopPdfExporter implements MultipagePdfExporter
     public void export(String name, List<String> docs, boolean multiPageSequence, boolean alwaysStartOnRecto)
         throws Exception
     {
+        export(name, docs, multiPageSequence, alwaysStartOnRecto, false);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.xwiki.pdf.multipageexport.MultipagePdfExporter#export(java.lang.String, java.util.List, boolean,
+     *      boolean, boolean)
+     */
+    public void export(String name, List<String> docs, boolean multiPageSequence, boolean alwaysStartOnRecto,
+        boolean pageBreakBeforeDocument) throws Exception
+    {
         XWikiContext context = getXWikiContext();
 
         // Preparing the PDF http headers to have the browser recognize the file
@@ -227,7 +239,7 @@ public class XslFopPdfExporter implements MultipagePdfExporter
                 DocumentReference currentDocReference = this.currentDRResolver.resolve(docName);
                 XWikiDocument currentDoc = context.getWiki().getDocument(currentDocReference, context);
                 XDOM childXDom =
-                    getXDOMForDoc(currentDoc, multiPageSequence, alwaysStartOnRecto,
+                    getXDOMForDoc(currentDoc, multiPageSequence, alwaysStartOnRecto, pageBreakBeforeDocument,
                         this.getPDFTemplateDocument(context), pagesToExport);
                 xDom.addChildren(childXDom.getChildren());
             }
@@ -302,6 +314,8 @@ public class XslFopPdfExporter implements MultipagePdfExporter
      * @param multiPageSequence whether the pdf changes header on every new document or presents them all as a single
      *            document
      * @param startOnRecto whether this document rendering should always start on recto
+     * @param pageBreakBeforeDocument whether a page break should be added before a document nevertheless, even if it's
+     *            not a multipage sequence (this parameter only has effect if the multipagesequence is on "false")
      * @param pdfTemplateDoc the template document used for this export
      * @param pagesList the total list of pages to be exported, needed so that the xdom preparation can be done in
      *            context
@@ -309,7 +323,7 @@ public class XslFopPdfExporter implements MultipagePdfExporter
      * @throws Exception in case there are errors parsing this document in XDOM or preparing it
      */
     private XDOM getXDOMForDoc(XWikiDocument doc, boolean multiPageSequence, boolean startOnRecto,
-        XWikiDocument pdfTemplateDoc, List<String> pagesList) throws Exception
+        boolean pageBreakBeforeDocument, XWikiDocument pdfTemplateDoc, List<String> pagesList) throws Exception
     {
         XDOM childXdom = (doc == null) ? null : doc.getXDOM();
         childXdom = (childXdom == null) ? null : childXdom.clone();
@@ -404,6 +418,15 @@ public class XslFopPdfExporter implements MultipagePdfExporter
                     decoratedXDom.addChild(idBlock);
                 }
                 decoratedXDom.addChildren(childXdom.getChildren());
+                // add a pagebreak after each document to force the start of the next document on the next page
+                if (pageBreakBeforeDocument) {
+                    // add here a div (group) to hold the page-break-after: always - let's hope it does not take room in
+                    // the export
+                    Map<String, String> pageBreakParams = new HashMap<String, String>();
+                    pageBreakParams.put("style", "page-break-after: always;");
+                    GroupBlock pageBreakBlock = new GroupBlock(pageBreakParams);
+                    decoratedXDom.addChild(pageBreakBlock);
+                }
                 childXdom = decoratedXDom;
             }
         } finally {

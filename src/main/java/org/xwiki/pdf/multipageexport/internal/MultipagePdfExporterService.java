@@ -33,6 +33,7 @@ import org.xwiki.pdf.multipageexport.MultipagePdfExporter;
 import org.xwiki.script.service.ScriptService;
 import org.xwiki.security.authorization.AuthorizationManager;
 import org.xwiki.security.authorization.Right;
+import org.xwiki.stability.Unstable;
 
 import com.xpn.xwiki.XWikiContext;
 
@@ -107,6 +108,29 @@ public class MultipagePdfExporterService implements ScriptService
         throws Exception
     {
         pdfexporter.export(name, getAccessibleDocuments(docs), multiPageSequence, alwaysStartOnRecto);
+    }
+
+    /**
+     * @param name the title of the document to export, the name of the file will be computed from this title replacing
+     *            whitespace with underscores
+     * @param docs the list of pages to export
+     * @param multiPageSequence whether each page should be exported in its own page sequence, with its own header and
+     *            footer. For the moment, this function needs a custom xhtml2fo.xsl, which can be passed by passing a
+     *            the pdftemplate parameter
+     * @param alwaysStartOnRecto used in conjunction with multiPageSequence, whether each page sequence (each wiki
+     *            document) should always start on recto. If {@code multiPageSequence} is false, this parameter is
+     *            ignored.
+     * @param pageBreakBeforeDocument whether a page break should be added before a document nevertheless, even if it's
+     *            not a multipage sequence (this parameter only has effect if the multipagesequence is on "false")
+     * @throws Exception if something goes wrong during the export
+     * @since 1.2
+     */
+    @Unstable
+    public void export(String name, List<String> docs, boolean multiPageSequence, boolean alwaysStartOnRecto,
+        boolean pageBreakBeforeDocument) throws Exception
+    {
+        pdfexporter.export(name, getAccessibleDocuments(docs), multiPageSequence, alwaysStartOnRecto,
+            pageBreakBeforeDocument);
     }
 
     /**
