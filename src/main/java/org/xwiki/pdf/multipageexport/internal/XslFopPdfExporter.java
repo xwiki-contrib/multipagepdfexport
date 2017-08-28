@@ -225,6 +225,9 @@ public class XslFopPdfExporter implements MultipagePdfExporter
             fakeDoc.setTitle(name);
             fakeDoc.setDate(new Date());
             fakeDoc.setContent("");
+            fakeDoc.setAuthorReference(context.getUserReference());
+            fakeDoc.setContentAuthorReference(context.getUserReference());
+            fakeDoc.setCreatorReference(context.getUserReference());
             // get the combined xdom of all documents
             XDOM xDom = fakeDoc.getXDOM();
             // absolutize the list first. We need this pass before the actual export since the list will be used as a
