@@ -32,7 +32,7 @@
   <artifactId>xwiki-multipagepdfexport</artifactId>
   <name>XWiki Multipage PDF Export</name>
   <packaging>jar</packaging>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.2.1</version>
   <description>API for exporting multiple pages in the wiki to a PDF, with various options.</description>
   <developers>
     <developer>
@@ -44,7 +44,7 @@
     <connection>scm:git:git://github.com/xwiki-contrib/multipagepdfexport.git</connection>
     <developerConnection>scm:git:git@github.com:xwiki-contrib/multipagepdfexport.git</developerConnection>
     <url>https://github.com/xwiki-contrib/multipagepdfexport.git</url>
-    <tag>HEAD</tag>
+    <tag>xwiki-multipagepdfexport-1.2.1</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
