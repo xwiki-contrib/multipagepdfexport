@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
 import org.xwiki.context.Execution;
@@ -44,12 +45,9 @@ import com.xpn.xwiki.XWikiContext;
  * @version $Id$
  */
 @Component("pdfexporter")
+@Singleton
 public class MultipagePdfExporterService implements ScriptService
 {
-    @Inject
-    @Named("xslfop")
-    private MultipagePdfExporter pdfexporter;
-
     /**
      * The execution, to get the context from it.
      */
@@ -58,6 +56,10 @@ public class MultipagePdfExporterService implements ScriptService
 
     @Inject
     protected AuthorizationManager authorizationManager;
+
+    @Inject
+    @Named("xslfop")
+    private MultipagePdfExporter pdfexporter;
 
     /**
      * Reference resolver for string representations of references.
